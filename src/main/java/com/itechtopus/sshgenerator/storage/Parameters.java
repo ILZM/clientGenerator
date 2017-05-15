@@ -2,6 +2,8 @@ package com.itechtopus.sshgenerator.storage;
 
 public class Parameters {
 
+  public static long OUTPUT_SCHEDULER_PERIOD = 3_000_000;
+
   public static int CLIENT_PI_BUFFER_SIZE = 50;
 
   public static int ACCOUNT_AND_TRANSACTION_BUFFER_SIZE = 50_000;
@@ -19,6 +21,8 @@ public class Parameters {
   public static boolean GENERATE_DUPLICATES = true;
 
   public static final int DUPLICATES_GENERATION_PERIOD = 5000; // one of 5000 is stored as duplicate
+
+  public static String OUTPUT_FOLDER = "/transfer/";
 
 
 }
