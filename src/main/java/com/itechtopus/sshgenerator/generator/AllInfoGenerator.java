@@ -1,21 +1,18 @@
 package com.itechtopus.sshgenerator.generator;
 
-import com.itechtopus.sshgenerator.model.Client;
-import com.itechtopus.sshgenerator.model.ClientAccountTransaction;
-import com.itechtopus.sshgenerator.model.ClientAddr;
-import com.itechtopus.sshgenerator.model.ClientPhone;
+import com.itechtopus.sshgenerator.model.*;
 import com.itechtopus.sshgenerator.model.enums.AddressType;
 import com.itechtopus.sshgenerator.model.enums.PhoneType;
+import com.itechtopus.sshgenerator.storage.MainStorage;
 import com.itechtopus.sshgenerator.to.AccountTo;
 import com.itechtopus.sshgenerator.to.ClientPI;
 import com.itechtopus.sshgenerator.to.ClientTo;
 import com.itechtopus.sshgenerator.worker.Saver;
+import sun.awt.geom.AreaOp;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.itechtopus.sshgenerator.generator.Constants.*;
 import static com.itechtopus.sshgenerator.generator.Util.rnd;
@@ -33,12 +30,22 @@ public class AllInfoGenerator {
   private final TransactionGenerator transactionGenerator = TransactionGenerator.getInstance();
 
   public static AllInfoGenerator get() {
+    if (instance == null)
+      instance = new AllInfoGenerator(MainStorage.clientPISaver, MainStorage.AccountSaver, MainStorage.transactionSaver);
     return instance;
   }
 
   private final Saver saveClientPI;
   private final Saver saveAccount;
   private final Saver saveTransaction;
+
+  private final Set<ClientPI> clientPIS = Util.newSet();
+  private final Map<ClientPI, List<ClientAccount>> accountMap = Util.newMap();
+
+  private final AtomicInteger clientIdCounter = new AtomicInteger(10000);
+  private final AtomicInteger accountIdCounter = new AtomicInteger(10000);
+  private final AtomicInteger transactionIdCounter = new AtomicInteger(10000);
+
 
   public AllInfoGenerator(Saver saveClientPI, Saver saveAccount, Saver saveTransaction) {
     instance = this;
@@ -59,11 +66,16 @@ public class AllInfoGenerator {
 
   /**
    * Generates and triggers to store new ClientParticular info (client, addresses, phones)
+   * Also stores in clientPIS List
    * @return new clientPI instance
    */
   public ClientPI generateNewClientPI() {
     ClientPI clientPI = new ClientPI();
-    clientPI.client = clientGenerator.generateNewClient();
+    do {
+      clientPI.client = clientGenerator.generateNewClient();
+    } while (clientPIS.contains(clientPI));
+
+    clientPI.client.id = clientIdCounter.incrementAndGet();
 
     // Generating all addresses (two)
     for (AddressType addressType : AddressType.values())
@@ -79,14 +91,57 @@ public class AllInfoGenerator {
         clientPI.phones.add(phoneGenerator.generatePhone(clientPI.client, phoneType));
     }
 
+    clientPIS.add(clientPI);
     saveClientPI.save(clientPI);
     return clientPI;
+  }
+
+  public ClientPI getRandomClientPI() {
+    ClientPI clientPI = Util.getRandom(clientPIS);
+    return  clientPI != null ? clientPI : generateNewClientPI();
+  }
+
+  public ClientAccount generateNewAccount(ClientPI clientPi){
+    if (clientPi == null)
+      clientPi = getRandomClientPI();
+    ClientAccount account = accountGenerator.generateAccount(clientPi.client);
+    account.id = accountIdCounter.incrementAndGet();
+    List<ClientAccount> accounts = accountMap.get(clientPi);
+    if (accounts == null) {
+      accounts = Util.newList();
+      accountMap.put(clientPi, accounts);
+    }
+    saveAccount.save(account);
+    return account;
+  }
+
+  public ClientAccount generateNewAccount() {
+    return generateNewAccount(getRandomClientPI());
+  }
+
+  public ClientAccount getRandomAccount() {
+    List<ClientAccount> accounts = accountMap.get(getRandomClientPI());
+    return accounts != null && !accounts.isEmpty() ? Util.getRandom(accounts) : generateNewAccount();
+  }
+
+  public ClientAccountTransaction generateNewTransaction(ClientAccount account) {
+    if (account == null)
+      account = generateNewAccount();
+    ClientAccountTransaction transaction = transactionGenerator.generateRandomTransaction(account, null);
+    transaction.id = transactionIdCounter.incrementAndGet();
+    saveTransaction.save(transaction);
+    return transaction;
+  }
+
+  public ClientAccountTransaction generateNewTransaction() {
+    return generateNewTransaction(getRandomAccount());
   }
 
   private ClientTo generateNewClientTo(Client client) {
     // Generating client itself
     ClientTo clientTo = new ClientTo();
     clientTo.client = client;
+    clientTo.client.id = clientIdCounter.incrementAndGet();
 
     // Generating all addresses (two)
     for (AddressType addressType : AddressType.values())
@@ -119,56 +174,12 @@ public class AllInfoGenerator {
     }
   }
 
-  public String convertToXML(ClientTo clientTo) {
-    StringBuilder sb = new StringBuilder();
-      sb.append("\t<client id=\"" + clientTo.client.id + "\"> \n");
-        sb.append("\t\t<surname value=\"" + clientTo.client.surname + "\" /> \n");
-        sb.append("\t\t<name value=\"" + clientTo.client.name + "\" /> \n");
-        sb.append("\t\t<patronymic value=\"" + clientTo.client.patronymic + "\" /> \n");
-        sb.append("\t\t<gender value=\"" + clientTo.client.gender.toString() + "\" /> \n");
-        sb.append("\t\t<charm value=\"" + clientTo.client.charm.name + "\" /> \n");
-        sb.append("\t\t<birth value=\"" + format(clientTo.client.birthDate) + "\" /> \n");
-        sb.append("\t\t<address> \n");
-          ClientAddr homAddr = clientTo.addresses.get(AddressType.FACT);
-          sb.append("\t\t\t<fact street=\"" + homAddr.street + "\" house=\"" + homAddr.house + "\" flat=\"" + homAddr.flat + "\"/> \n");
-          ClientAddr regAddr = clientTo.addresses.get(AddressType.REG);
-          sb.append("\t\t\t<register street=\"" + regAddr.street + "\" house=\"" + regAddr.house + "\" flat=\"" + regAddr.flat + "\"/> \n");
-        sb.append("\t\t</address> \n");
-        for (ClientPhone phone : clientTo.phones)
-          sb.append("\t\t<" + tagFor(phone.type) + ">" + phone.pNumber + "</" + tagFor(phone.type) + "> \n");
-        sb.append("\t</client> \n \n");
-    return sb.toString();
-  }
-
-  public String convertToXML(Collection<ClientTo> clientTos) {
-    StringBuilder sb = new StringBuilder("<cia> \n");
-    for (ClientTo clientTo : clientTos)
-      sb.append(convertToXML(clientTo));
-    sb.append("</cia>");
-    return sb.toString();
-  }
-
-  public String getUnreadableXML(Collection<ClientTo> clientTos) {
-    return convertToXML(clientTos).replaceAll(" \n", "").replaceAll("\t", "");
-  }
-
-  private String tagFor(PhoneType type) {
-    switch (type) {
-      case HOME   : return "homePhone";
-      case WORK   : return "workPhone";
-      case MOBILE : return "mobilePhone";
-    }
-    return "";
-  }
-
-  private String format(Date birthDate) {
-    return DATE_FORMAT.format(birthDate);
-  }
 
   private static String format2(Date date) {
     return DATE_FORMAT2.format(date);
   }
 
+/*
   public static void main(String[] args){
     AllInfoGenerator aig = AllInfoGenerator.get();
     System.out.println(aig.convertToXML(aig.getAllTos()));
@@ -193,6 +204,7 @@ public class AllInfoGenerator {
     }
     System.out.println("Records successfully added to the file ");
   }
+*/
 
 
 
