@@ -58,7 +58,7 @@ public class AllInfoGenerator {
   }*/
 
   /**
-   * Generates and rtriggers to store new ClientParcticular info (client, addresses, phones)
+   * Generates and triggers to store new ClientParticular info (client, addresses, phones)
    * @return new clientPI instance
    */
   public ClientPI generateNewClientPI() {

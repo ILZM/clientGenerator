@@ -4,8 +4,6 @@ import com.itechtopus.sshgenerator.generator.Util;
 import com.itechtopus.sshgenerator.model.ClientAccount;
 import com.itechtopus.sshgenerator.model.ClientAccountTransaction;
 import com.itechtopus.sshgenerator.model.ModelParent;
-import com.itechtopus.sshgenerator.model.TransactionType;
-import com.itechtopus.sshgenerator.to.AccountTo;
 import com.itechtopus.sshgenerator.to.ClientPI;
 import com.itechtopus.sshgenerator.worker.Saver;
 

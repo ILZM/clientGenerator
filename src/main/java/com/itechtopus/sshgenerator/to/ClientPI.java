@@ -10,6 +10,8 @@ import com.itechtopus.sshgenerator.model.enums.AddressType;
 import java.util.List;
 import java.util.Map;
 
+// Client Particular Info
+
 public class ClientPI extends ModelParent {
 
   public Client client;
