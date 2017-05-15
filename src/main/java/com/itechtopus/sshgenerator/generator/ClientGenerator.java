@@ -25,8 +25,6 @@ public class ClientGenerator {
   private static ClientGenerator instance;
   private static final AtomicInteger idCounter = new AtomicInteger(1000);
 
-  private final Set<Client> clientSet = Util.newSet();
-
   public static ClientGenerator getInstance() {
     if (instance == null)
       instance = new ClientGenerator();
@@ -43,7 +41,6 @@ public class ClientGenerator {
       Client client;
       client = generateRandomClient(null);
       client.id = ASSIGN_ID_TO_GENERATED_DATA ? idCounter.incrementAndGet() : null;
-      clientSet.add(client);
     }
   }
 
@@ -56,26 +53,15 @@ public class ClientGenerator {
    */
   private Client generateRandomClient(Gender gender) {
     Client client = new Client();
-    do {
-      ClientFullName cfn = generateFullName(null);
-      client.name = cfn.name;
-      client.surname = cfn.surname;
-      client.patronymic = cfn.patronymic;
-      client.gender = cfn.gender;
-      client.birthDate = generateRandomBirthDate();
-      client.charm = CharmGenerator.getInstance().getRandomCharm();
-    } while (clientSet.contains(client));  // To avoid generating client equal to what is already in storage
+    ClientFullName cfn = generateFullName(null);
+    client.name = cfn.name;
+    client.surname = cfn.surname;
+    client.patronymic = cfn.patronymic;
+    client.gender = cfn.gender;
+    client.birthDate = generateRandomBirthDate();
+    client.charm = CharmGenerator.getInstance().getRandomCharm();
     return client;
   }
-
-  /**
-   * To get already created Client
-   * @return already created Client instance with invalid Id field (need to be reset to null)
-   */
-  public Client getRandomClient(){
-    return getRandom(clientSet);
-  }
-
 
   /**
    * Method generates new client and stores it in storage
@@ -83,16 +69,7 @@ public class ClientGenerator {
    */
   public Client generateNewClient() {
     Client client = generateRandomClient(null);
-    clientSet.add(client);
     return client;
-  }
-
-  /**
-   * To get a List of already created clients
-   * @return a list of Client instances with invalid ids (need to be reset to null)
-   */
-  public List<Client> getAllClients() {
-    return getListOfCollection(clientSet);
   }
 
   private Date generateRandomBirthDate() {
