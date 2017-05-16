@@ -1,17 +1,21 @@
 package com.itechtopus.sshgenerator.generator;
 
+import com.itechtopus.sshgenerator.model.ClientAccount;
+import com.itechtopus.sshgenerator.model.ClientAccountTransaction;
 import com.itechtopus.sshgenerator.model.ClientAddr;
 import com.itechtopus.sshgenerator.model.ClientPhone;
 import com.itechtopus.sshgenerator.model.enums.AddressType;
 import com.itechtopus.sshgenerator.model.enums.PhoneType;
 import com.itechtopus.sshgenerator.to.ClientPI;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT;
+import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT_XML;
 
 public class Util {
 
@@ -77,7 +81,11 @@ public class Util {
   }
 
   public static String getUnreadableXML(Collection<ClientPI> clientPIS) {
-    return convertToXML(clientPIS).replaceAll(" \n", "").replaceAll("\t", "");
+    return simplify(convertToXML(clientPIS));
+  }
+
+  public static String simplify(String value) {
+    return value.replaceAll(" \n", "").replaceAll("\t", "").replaceAll("\n", "");
   }
 
   private static String tagFor(PhoneType type) {
@@ -89,7 +97,60 @@ public class Util {
     return "";
   }
 
+  public static String convertToXML(ClientAccountTransaction transaction) {
+    StringBuilder sb = new StringBuilder("{\n");
+    sb.append(convertPair("type", "transaction"));
+    sb.append(convertPair("money", format(transaction.money)));
+    sb.append(convertPair("finished_at", formatXML(transaction.finishedAt)));
+    sb.append(convertPair("transaction_type", transaction.type.name));
+    sb.append(convertPair("account_number", transaction.account.a_number));
+    sb.append("}\n");
+    return sb.toString();
+  }
+
+  private static String convertPair(String key, String value) {
+    return "\t\"" + key + "\": \"" + value + "\"\n";
+  }
+
+  public static String convertToXML(ClientAccount newAccount) {
+    StringBuilder sb = new StringBuilder("{\n");
+    sb.append(convertPair("type", "new_account"));
+    sb.append(convertPair("client_id", format(newAccount.client.id)));
+    sb.append(convertPair("registered_at", format(newAccount.registeredAt)));
+    sb.append("}\n");
+    return sb.toString();
+  }
+
   private static String format(Date birthDate) {
     return DATE_FORMAT.format(birthDate);
+  }
+
+  private static DecimalFormat moneyXMLFormat = new DecimalFormat("###,###,###,###,###.00");
+  private static DecimalFormat clientIdFormat = new DecimalFormat("##############,###");
+
+  private static String format(float money) {
+    return ((money < 0 ? "-" : "+") + moneyXMLFormat.format(Math.abs(money))).replaceAll(",", "_");
+  }
+
+  private static String format(int id) {
+    return clientIdFormat.format(id).replaceAll(",", "-");
+  }
+
+  private static String formatXML(Date date) {
+    return DATE_FORMAT_XML.format(date);
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    Random rnd = new Random();
+    while (true) {
+//      float number = 1000 * rnd.nextFloat() + 10000 + rnd.nextFloat();
+//      if (rnd.nextBoolean())
+//        number *= -1;
+//      System.out.println(format(number)+ " <<< " + String.format("%.2f", number));
+
+      System.out.println(formatXML(new Date()));
+
+      Thread.sleep(250);
+    }
   }
 }
