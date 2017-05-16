@@ -26,7 +26,9 @@ public class Constants {
   public static final float MAXIMUM_BALANCE = 1_000_000f;
   public static final float MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION = 1_000;
   public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-  public static final SimpleDateFormat DATE_FORMAT2 = new SimpleDateFormat("yyyy-MM-dd-mm-ss");
+  public static final SimpleDateFormat DATE_FORMAT2 = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
+  public static final SimpleDateFormat DATE_FORMAT_XML = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); //"2010-01-23T11:56:11.987"
+
 
 
   public static final Charm CHARM = new Charm(1, "Тихий", "Этот человек очень спокоен", 0.001f);

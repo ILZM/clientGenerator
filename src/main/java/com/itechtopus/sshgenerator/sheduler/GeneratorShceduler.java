@@ -1,11 +1,12 @@
 package com.itechtopus.sshgenerator.sheduler;
 
 import com.itechtopus.sshgenerator.generator.AllInfoGenerator;
-import com.itechtopus.sshgenerator.generator.Constants;
 import com.itechtopus.sshgenerator.storage.MainStorage;
 import com.itechtopus.sshgenerator.storage.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class GeneratorShceduler implements Runnable{
 
@@ -48,15 +49,22 @@ public class GeneratorShceduler implements Runnable{
   }
 
   private void generateClient() {
-    generator.generateNewClientPI();
+    log.info("Generating new client: " + generator.generateNewClientPI());
   }
 
   private void generateAccounts() {
-    generator.generateNewAccount();
+    log.info("Generating new Account: " + generator.generateNewAccount());
+    log.info("Transactions generated:" +
+        Arrays
+            .stream(MainStorage.operations.toString()
+                .split("}"))
+                .filter(line -> !line.contains("new_account"))
+                .count());
   }
 
   private void generateTransactions() {
-    generator.generateNewTransaction();
+    for (int i = 0; i < Parameters.TRANSACTIONS_PER_ITERATION; i++)
+      generator.generateNewTransaction();
   }
 
 
