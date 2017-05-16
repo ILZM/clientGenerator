@@ -36,28 +36,52 @@ public class OutputScheduler implements Runnable {
 
   private void flush() {
     flushClientPIS();
+    flushOperations();
   }
 
   private void doIteration() {
     doCount();
     flushClientPIS();
+    flushOperations();
+  }
 
+  private void flushOperations() {
+    if (MainStorage.operations.length() == 0)
+      return;
+    String newFileName = getOperationsNewFileName();
+    File file = new File(getOperationsNewFileName());
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+      bw.write(Util.simplify(MainStorage.operations.toString()));
+      bw.flush();
+      log.info(MainStorage.operations.toString());
+      MainStorage.operations = new StringBuffer();
+    } catch (IOException e) {
+      log.info("Error during output writing Operations to file:" + newFileName, e);
+    }
   }
 
   private void flushClientPIS() {
     if (MainStorage.clientPIs.isEmpty())
       return;
-    String newFileName = Parameters.OUTPUT_FOLDER + format(new Date()) + "-cia-right.xml";
+    String newFileName = getCIANewFileName();
     File file = new File(newFileName);
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-      bw.write(Util.getUnreadableXML(MainStorage.clientPIs));
+      bw.write(Util.simplify(Util.convertToXML(MainStorage.clientPIs)));
       bw.flush();
       log.info("" + Util.convertToXML(MainStorage.clientPIs));
       MainStorage.clientPIs.clear();
     } catch (IOException e) {
       log.info("Error during output writing ClientPI's to file:" + newFileName, e);
     }
+  }
+
+  private String getCIANewFileName() {
+    return Parameters.OUTPUT_FOLDER + "from_cia_" + format(new Date()) + ".xml";
+  }
+
+  private String getOperationsNewFileName() {
+    return Parameters.OUTPUT_FOLDER + "from_frs_" + format(new Date()) + ".json_row";
   }
 
   private static String format(Date date) {

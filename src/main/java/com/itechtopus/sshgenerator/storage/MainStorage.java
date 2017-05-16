@@ -17,6 +17,8 @@ public class MainStorage {
 
   public static final List<ClientAccountTransaction> transactions = Util.newList();
 
+  public static StringBuffer operations = new StringBuffer();
+
   private static int duplicateCounter = 0;
 
   private static boolean needDuplicate(){
@@ -45,7 +47,9 @@ public class MainStorage {
     public void save(ModelParent entity) {
       if (!(entity instanceof ClientAccount))
         throw new IllegalArgumentException("Account saver can only save ClientAccounts");
-      accounts.add((ClientAccount) entity);
+      ClientAccount account = (ClientAccount) entity;
+      accounts.add(account);
+      operations.append(Util.convertToXML(account));
       if (needDuplicate())
         insertIntoList(accounts, (ClientAccount) entity);
     }
@@ -56,7 +60,9 @@ public class MainStorage {
     public void save(ModelParent entity) {
       if (!(entity instanceof ClientAccountTransaction))
         throw new IllegalArgumentException("Transaction saver can only save ClientAccountTransactions");
-      transactions.add((ClientAccountTransaction) entity);
+      ClientAccountTransaction transaction = (ClientAccountTransaction) entity;
+      transactions.add(transaction);
+      operations.append(Util.convertToXML(transaction));
       if (needDuplicate())
         insertIntoList(transactions, (ClientAccountTransaction) entity);
     }
