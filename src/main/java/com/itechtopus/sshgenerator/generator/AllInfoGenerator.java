@@ -174,10 +174,10 @@ public class AllInfoGenerator {
     }
   }
 
-
+/*
   private static String format2(Date date) {
     return DATE_FORMAT2.format(date);
-  }
+  }*/
 
 /*
   public static void main(String[] args){
