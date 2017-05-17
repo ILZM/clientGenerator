@@ -8,9 +8,7 @@ import com.itechtopus.sshgenerator.to.AccountTo;
 import com.itechtopus.sshgenerator.to.ClientPI;
 import com.itechtopus.sshgenerator.to.ClientTo;
 import com.itechtopus.sshgenerator.worker.Saver;
-import sun.awt.geom.AreaOp;
 
-import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
