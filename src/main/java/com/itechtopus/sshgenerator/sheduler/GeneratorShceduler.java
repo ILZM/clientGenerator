@@ -1,6 +1,7 @@
 package com.itechtopus.sshgenerator.sheduler;
 
 import com.itechtopus.sshgenerator.generator.AllInfoGenerator;
+import com.itechtopus.sshgenerator.generator.Constants;
 import com.itechtopus.sshgenerator.storage.MainStorage;
 import com.itechtopus.sshgenerator.storage.Parameters;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ public class GeneratorShceduler implements Runnable{
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   private long counter = 0;
+
+  private long transactionCount = 0;
 
   private AllInfoGenerator generator;
 
@@ -41,6 +44,16 @@ public class GeneratorShceduler implements Runnable{
       generateAccounts();
     if (counter % Parameters.CLIENT_GENERATION_PERIOD == 0)
       generateClient();
+
+    if (transactionCount++ > Constants.TRANSACTION_BUFFER_SIZE) {
+      transactionCount = 0;
+      log.info("Transactions generated:" +
+          Arrays
+              .stream(MainStorage.operations.toString()
+                  .split("}"))
+              .filter(line -> !line.contains("new_account"))
+              .count());
+    }
   }
 
   private void doCount() {
@@ -54,12 +67,6 @@ public class GeneratorShceduler implements Runnable{
 
   private void generateAccounts() {
     log.info("Generating new Account: " + generator.generateNewAccount());
-    log.info("Transactions generated:" +
-        Arrays
-            .stream(MainStorage.operations.toString()
-                .split("}"))
-                .filter(line -> !line.contains("new_account"))
-                .count());
   }
 
   private void generateTransactions() {
