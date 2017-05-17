@@ -3,7 +3,9 @@ package com.itechtopus.sshgenerator.test;
 import com.jcraft.jsch.*;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 public class SSHReader {
 
@@ -47,7 +49,7 @@ public class SSHReader {
         String fl = ls.get(i).toString();
         fl = fl.substring(fl.lastIndexOf(" ") + 1);
         System.out.println("Ls:" + fl);
-        fileName = fl.endsWith(".xml") ? fl : fileName;
+        fileName = !fl.endsWith(".xml") ? fl : fileName;
       }
       sftpChannel.cd(folder);
       File file = new File(folder + fileName);
@@ -55,7 +57,10 @@ public class SSHReader {
       buffer = new BufferedReader(new InputStreamReader(inputStream));
       String getLine = "";
       while ((getLine = buffer.readLine()) != null) {
-        System.out.println("Line: " + getLine);
+        System.out.println("Line: " + Arrays.stream(getLine.split("}"))
+            .map(line -> Arrays.stream(line.replace("{", "{\n").split("\"\"")).collect(Collectors.joining("\"\n\"")))
+            .map(line -> line.replaceAll("\n\"", "\n\t\""))
+            .collect(Collectors.joining("\n}\n")));
       }
       sftpChannel.exit();
       session.disconnect();
