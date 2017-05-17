@@ -24,7 +24,7 @@ public class Constants {
   public static final int ACCOUNT_NUMBER_LENGTH = 25;
   public static final float MINIMAL_BALANCE = 15_000f;
   public static final float MAXIMUM_BALANCE = 1_000_000f;
-  public static final float MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION = 1_000;
+  public static final float MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION = 1_000_000;
   public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
   public static final SimpleDateFormat DATE_FORMAT2 = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
   public static final SimpleDateFormat DATE_FORMAT_XML = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); //"2010-01-23T11:56:11.987"
