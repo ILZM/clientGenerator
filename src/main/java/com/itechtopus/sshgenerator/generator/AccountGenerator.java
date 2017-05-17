@@ -53,9 +53,12 @@ public class AccountGenerator {
   }
 
   private String generateAccountNumber() {
-    StringBuilder s = new StringBuilder("KZT");
-    while (s.length() < Constants.ACCOUNT_NUMBER_LENGTH)
+    StringBuilder s = new StringBuilder();
+    while (s.length() < Constants.ACCOUNT_NUMBER_LENGTH) {
       s.append("" + rnd.nextInt(10));
+      if (s.length() == 5)
+        s.append("KZ");
+    }
     return s.toString();
   }
 
