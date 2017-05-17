@@ -6,9 +6,9 @@
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/greetGo/log/generator.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.Si">
             <!-- daily rollover -->
-            <fileNamePattern>/greetGo/log/archive/techtask.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>/greetGo/log/archive/generator.%d{yyyy-MM-dd}.log</fileNamePattern>
             <!-- keep 30 days' worth of history capped at 3GB total size -->
             <maxHistory>30</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
