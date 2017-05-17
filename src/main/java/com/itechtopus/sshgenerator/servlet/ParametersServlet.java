@@ -21,8 +21,8 @@ public class ParametersServlet extends HttpServlet {
     request.setAttribute("GENERATE_DUPLICATES", Parameters.GENERATE_DUPLICATES);
     request.setAttribute("SCHEDULER_PERIOD", Parameters.SCHEDULER_PERIOD);
     request.setAttribute("DUPLICATES_GENERATION_PERIOD", Parameters.DUPLICATES_GENERATION_PERIOD);
-    request.setAttribute("generatedClients", AllInfoGenerator.get()..clientPIs.size());
-    request.setAttribute("generatedAccounts", MainStorage.accounts.size());
+    request.setAttribute("generatedClients", AllInfoGenerator.get().clientPIS.size());
+    request.setAttribute("generatedAccounts", AllInfoGenerator.get().accountMap.size());
     request.getRequestDispatcher("/WEB-INF/parameters.jsp").forward(request, response);
   }
 

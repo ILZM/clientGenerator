@@ -12,9 +12,9 @@ public class Parameters {
 
   public static int TRANSACTIONS_PER_ITERATION = 50; // number of transactions need to be generated every iteration
 
-  public static int ACCOUNT_GENERATION_PERIOD = 40; // 5 means one account per 5 seconds (if sheduler period is 1000 ms)
+  public static int ACCOUNT_GENERATION_PERIOD = 50; // 5 means one account per 5 seconds (if sheduler period is 1000 ms)
 
-  public static int CLIENT_GENERATION_PERIOD = 50;
+  public static int CLIENT_GENERATION_PERIOD = 10;
 
   public static boolean GENERATE_DUPLICATES = true;
 
