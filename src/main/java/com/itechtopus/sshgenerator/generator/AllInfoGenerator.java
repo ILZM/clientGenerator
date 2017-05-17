@@ -19,7 +19,7 @@ public class AllInfoGenerator {
 
   private static AllInfoGenerator instance;
 
-  private final Map<Integer, ClientTo> clientToMap = Util.newMap();
+//  public final Map<Integer, ClientTo> clientToMap = Util.newMap();
 
   private final ClientGenerator clientGenerator = ClientGenerator.getInstance();
   private final AddressGenerator addressGenerator = AddressGenerator.getInstance();
@@ -37,8 +37,8 @@ public class AllInfoGenerator {
   private final Saver saveAccount;
   private final Saver saveTransaction;
 
-  private final Set<ClientPI> clientPIS = Util.newSet();
-  private final Map<ClientPI, List<ClientAccount>> accountMap = Util.newMap();
+  public final Set<ClientPI> clientPIS = Util.newSet();
+  public final Map<ClientPI, List<ClientAccount>> accountMap = Util.newMap();
 
   private final AtomicInteger clientIdCounter = new AtomicInteger(10000);
   private final AtomicInteger accountIdCounter = new AtomicInteger(10000);
@@ -52,10 +52,10 @@ public class AllInfoGenerator {
     this.saveTransaction = saveTransaction;
   }
 
-  public List<ClientTo> getAllTos() {
+  /*public List<ClientTo> getAllTos() {
     return Util.getListOfCollection(clientToMap.values());
   }
-
+*/
  /* private void generateData(int amount) {
     for (Client client : clientGenerator.getAllClients()) {
       clientToMap.put(client.id, generateNewClientTo(client));
