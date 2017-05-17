@@ -29,9 +29,13 @@ public class SSHReader {
     try {
       jsch.addIdentity(RSA_keyPath);
       session = jsch.getSession(user, host);
+
+      /*---- Unsafe part of connection. Allows Man-in-the-middle manupulations ----*/
       java.util.Properties config = new java.util.Properties();
       config.put("StrictHostKeyChecking", "no");
       session.setConfig(config);
+      /*---- end of the unsafe operation ----*/
+
       session.connect();
       Channel channel = session.openChannel("sftp");
       channel.connect();
@@ -45,7 +49,7 @@ public class SSHReader {
         System.out.println("Ls:" + fl);
         fileName = fl.endsWith(".xml") ? fl : fileName;
       }
-      sftpChannel.cd("/transfer/");
+      sftpChannel.cd(folder);
       File file = new File(folder + fileName);
       inputStream = sftpChannel.get(fileName);
       buffer = new BufferedReader(new InputStreamReader(inputStream));
