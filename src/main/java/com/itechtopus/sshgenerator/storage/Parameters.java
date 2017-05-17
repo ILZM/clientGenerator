@@ -18,7 +18,7 @@ public class Parameters {
 
   public static boolean GENERATE_DUPLICATES = true;
 
-  public static final int DUPLICATES_GENERATION_PERIOD = 5000; // one of 5000 is stored as duplicate
+  public static int DUPLICATES_GENERATION_PERIOD = 500; // one of 5000 is stored as duplicate
 
   public static String OUTPUT_FOLDER = "/transfer/";
 
