@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>Parameters</title>
-    <meta http-equiv=”refresh” content=”30" />
+    <meta http-equiv="refresh" content="15" />
 </head>
 <body>
     <form action="parameters" method="post">
