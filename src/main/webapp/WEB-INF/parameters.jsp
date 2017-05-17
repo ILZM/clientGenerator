@@ -12,6 +12,11 @@
     <meta http-equiv="refresh" content="15" />
 </head>
 <body>
+    <form action="parameters" method="get" id = "refffresh">
+        <input type="submit" hidden>
+        <p class="seconds"></p>
+    </form>
+
     <form action="parameters" method="post">
         <p>Сгенерировано клиентов:<%= request.getAttribute("generatedClients")%>,
             Сгенерировано счетов:<%= request.getAttribute("generatedAccounts")%></p>
@@ -54,5 +59,24 @@
             <input type="submit" value="Send"/>
         </p>
     </form>
+
+    <script type="text/javascript">
+        window.onload=function(){
+            var counter = 30;
+            var interval = setInterval(function() {
+                counter--;
+                $("#seconds").text(counter);
+                if (counter == 0) {
+                    redirect();
+                    clearInterval(interval);
+                }
+            }, 1000);
+
+        };
+
+        function redirect() {
+            document.getElementById("refffresh").submit();
+        }
+    </script>
 </body>
 </html>
