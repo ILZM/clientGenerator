@@ -52,6 +52,13 @@ public class AllInfoGenerator {
     this.saveTransaction = saveTransaction;
   }
 
+  public Long getAccountsSize() {
+    long sum = 0;
+    for (ClientPI client : accountMap.keySet())
+      sum += accountMap.get(client).size();
+    return sum;
+  }
+
   /*public List<ClientTo> getAllTos() {
     return Util.getListOfCollection(clientToMap.values());
   }

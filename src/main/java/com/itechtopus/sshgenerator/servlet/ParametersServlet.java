@@ -22,7 +22,7 @@ public class ParametersServlet extends HttpServlet {
     request.setAttribute("SCHEDULER_PERIOD", Parameters.SCHEDULER_PERIOD);
     request.setAttribute("DUPLICATES_GENERATION_PERIOD", Parameters.DUPLICATES_GENERATION_PERIOD);
     request.setAttribute("generatedClients", AllInfoGenerator.get().clientPIS.size());
-    request.setAttribute("generatedAccounts", AllInfoGenerator.get().accountMap.size());
+    request.setAttribute("generatedAccounts", AllInfoGenerator.get().getAccountsSize());
     request.getRequestDispatcher("/WEB-INF/parameters.jsp").forward(request, response);
   }
 
