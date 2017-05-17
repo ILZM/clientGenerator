@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import static com.itechtopus.sshgenerator.generator.Constants.CLIENT;
 import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT;
 import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT_XML;
 
@@ -116,9 +117,17 @@ public class Util {
     StringBuilder sb = new StringBuilder("{\n");
     sb.append(convertPair("type", "new_account"));
     sb.append(convertPair("client_id", format(newAccount.client.id)));
+    sb.append(convertPair("account_number", format(newAccount.a_number)));
     sb.append(convertPair("registered_at", format(newAccount.registeredAt)));
     sb.append("}\n");
     return sb.toString();
+  }
+
+  private static String format(String account_number) {
+    return account_number.substring(0, 10) + "-" +
+        account_number.substring(10, 15) + "-" +
+        account_number.substring(15, 21) + "-" +
+        account_number.substring(21);
   }
 
   private static String format(Date birthDate) {
@@ -141,16 +150,10 @@ public class Util {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    Random rnd = new Random();
-    while (true) {
-//      float number = 1000 * rnd.nextFloat() + 10000 + rnd.nextFloat();
-//      if (rnd.nextBoolean())
-//        number *= -1;
-//      System.out.println(format(number)+ " <<< " + String.format("%.2f", number));
-
-      System.out.println(formatXML(new Date()));
-
-      Thread.sleep(250);
-    }
+    System.out.println("32134KZ343-43546-535436-77656");
+    System.out.println(format("32134KZ3434354653543677656"));
+    System.out.println(convertToXML(new AccountGenerator().generateAccount(CLIENT)));
   }
+
+
 }
