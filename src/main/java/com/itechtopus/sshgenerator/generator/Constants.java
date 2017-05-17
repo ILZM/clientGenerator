@@ -21,7 +21,7 @@ public class Constants {
   public static final long JAN_1_2010 = 1262347200000L;
   public static final boolean ASSIGN_ID_TO_GENERATED_DATA = true  ;
   public static final int PHONE_NUMBER_LENGTH = 16;
-  public static final int ACCOUNT_NUMBER_LENGTH = 25;
+  public static final int ACCOUNT_NUMBER_LENGTH = 26;
   public static final float MINIMAL_BALANCE = 15_000f;
   public static final float MAXIMUM_BALANCE = 1_000_000f;
   public static final float MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION = 1_000_000;
