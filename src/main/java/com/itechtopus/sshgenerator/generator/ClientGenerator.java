@@ -73,7 +73,7 @@ public class ClientGenerator {
   }
 
   private Date generateRandomBirthDate() {
-    return new Date(JAN_1_1970 + (long)(rnd.nextFloat() * (MAX_CLIENT_AGE_DIFF *  1000 * 60 * 60 * 24 * 365)));
+    return new Date(JAN_1_1970 + (long)(rnd.nextFloat() * ((long)MAX_CLIENT_AGE_DIFF * 31536000000L)));
   }
 
   private ClientFullName generateFullName(Gender gender) {
@@ -90,6 +90,12 @@ public class ClientGenerator {
     return cfn;
   }
 
-
+  public static void main(String[] args) throws InterruptedException {
+    ClientGenerator cg = ClientGenerator.getInstance();
+    while (true) {
+      System.out.println(cg.generateRandomBirthDate());
+      Thread.sleep(250);
+    }
+  }
 
 }

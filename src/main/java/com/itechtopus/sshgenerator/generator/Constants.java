@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Constants {
   public static final int CLIENTS_TO_GENERATE = 200;
-  public static final int MAX_CLIENT_AGE_DIFF = 10;  // in years
+  public static final int MAX_CLIENT_AGE_DIFF = 30;  // in years
   public static final int ACCOUNTS_PER_CLIENT = 5;
   public static final int ACCOUNTS_MIN = 2;
   public static final int TRANSACTIONS_PER_ACCOUNT = 50;
