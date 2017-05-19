@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.itechtopus.sshgenerator.generator.Constants.*;
 import static com.itechtopus.sshgenerator.generator.Util.rnd;
@@ -19,6 +20,8 @@ public class TransactionGenerator {
 
   private final Set<TransactionType> types = Util.newSet();
   private final Map<ClientAccount, Date> lastTransactionMap = Util.newMap();
+
+  private final Map<ClientAccount, Float> accountBalances = Util.newMap();
 
   public static TransactionGenerator getInstance() {
     if (instance == null)
@@ -53,10 +56,15 @@ public class TransactionGenerator {
 
     ClientAccountTransaction transaction = new ClientAccountTransaction();
     transaction.account = account;
-    do {
+    float balance = accountBalances.get(account) != null ? accountBalances.get(account) : account.money;
+    if (balance > 0) {
       transaction.type = getRandomType();
-    } while (!isWithdrawing(transaction.type) || account.money > 0);
-    transaction.money = isWithdrawing(transaction.type) ? getRandomMoneyAmount(transaction.type, account.money) : getRandomMoneyAmount(transaction.type);
+      transaction.money = getRandomMoneyAmount(transaction.type, balance);
+    } else {
+      transaction.type = getRandomDepositTransaction();
+      transaction.money = getRandomMoneyAmount(transaction.type);
+    }
+    accountBalances.put(account, balance + transaction.money);
     transaction.finishedAt = new Timestamp(fromDate.getTime() + TRANSACTION_TIME_DIFF_MIN + (long)(rnd.nextFloat() * (TRANSACTION_TIME_DIFF_MAX - TRANSACTION_TIME_DIFF_MIN)));
     return transaction;
   }
@@ -90,6 +98,11 @@ public class TransactionGenerator {
 
   private TransactionType getRandomType() {
     return Util.getRandom(types);
+  }
+
+
+  private TransactionType getRandomDepositTransaction() {
+    return Util.getRandom(types.stream().filter(tr -> !isWithdrawing(tr)).collect(Collectors.toList()));
   }
 
   private float getRandomMoneyAmount(TransactionType type) {

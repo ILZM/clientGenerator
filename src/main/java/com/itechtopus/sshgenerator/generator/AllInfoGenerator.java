@@ -116,6 +116,7 @@ public class AllInfoGenerator {
       accounts = Util.newList();
       accountMap.put(clientPi, accounts);
     }
+    accounts.add(account);
     saveAccount.save(account);
     return account;
   }
