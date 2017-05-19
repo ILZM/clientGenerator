@@ -121,7 +121,7 @@ public class Util {
     sb.append(convertPair("type", "new_account"));
     sb.append(convertPair("client_id", format(newAccount.client.id)));
     sb.append(convertPair("account_number", format(newAccount.a_number)));
-    sb.append(convertPair("registered_at", format(newAccount.registeredAt)));
+    sb.append(convertPair("registered_at", formatXML(newAccount.registeredAt)));
     sb.append("}\n");
     return sb.toString();
   }
@@ -153,12 +153,12 @@ public class Util {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    List<String> list1 = Arrays.asList("11", "22", "33", "44", "55");
+    /*List<String> list1 = Arrays.asList("11", "22", "33", "44", "55");
     List<String> list2 = Arrays.asList("66", "77", "88", "99", "10");
     Map<String, List<String>> map = new HashMap<>();
     map.put("line1", list1);
     map.put("line2", list2);
-    System.out.println(getMapValuesTotalSize(map));
+    System.out.println(getMapValuesTotalSize(map));*/
 
   }
 
