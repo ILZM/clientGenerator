@@ -53,8 +53,10 @@ public class TransactionGenerator {
 
     ClientAccountTransaction transaction = new ClientAccountTransaction();
     transaction.account = account;
-    transaction.type = getRandomType();
-    transaction.money = getRandomMoneyAmount(transaction.type);
+    do {
+      transaction.type = getRandomType();
+    } while (!isWithdrawing(transaction.type) || account.money > 0);
+    transaction.money = isWithdrawing(transaction.type) ? getRandomMoneyAmount(transaction.type, account.money) : getRandomMoneyAmount(transaction.type);
     transaction.finishedAt = new Timestamp(fromDate.getTime() + TRANSACTION_TIME_DIFF_MIN + (long)(rnd.nextFloat() * (TRANSACTION_TIME_DIFF_MAX - TRANSACTION_TIME_DIFF_MIN)));
     return transaction;
   }
@@ -91,11 +93,18 @@ public class TransactionGenerator {
   }
 
   private float getRandomMoneyAmount(TransactionType type) {
-    float money = Math.abs(rnd.nextFloat() * MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION);
-    if (type.code.endsWith("W"))
+    return getRandomMoneyAmount(type, MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION);
+  }
+
+  private float getRandomMoneyAmount(TransactionType type, float maximum) {
+    float money = Math.abs(rnd.nextFloat() * (maximum <= MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION ? maximum : MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION));
+    if (isWithdrawing(type))
       money *= -1;
     return money;
   }
 
+  private boolean isWithdrawing(TransactionType  type) {
+    return type.code.endsWith("W");
+  }
 
 }
