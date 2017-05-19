@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import static com.itechtopus.sshgenerator.generator.Constants.CLIENT;
 import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT;
 import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT_XML;
 
@@ -49,6 +48,10 @@ public class Util {
 
   public static <T> Set<T> newSet() {
     return new CopyOnWriteArraySet<T>();
+  }
+
+  public static <T, K> int getMapValuesTotalSize(Map<T, List<K>> map) {
+    return map.values().stream().mapToInt(list -> list.size()).sum();
   }
 
 
@@ -150,9 +153,13 @@ public class Util {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    System.out.println("32134KZ343-43546-535436-77656");
-    System.out.println(format("32134KZ3434354653543677656"));
-    System.out.println(convertToXML(new AccountGenerator().generateAccount(CLIENT)));
+    List<String> list1 = Arrays.asList("11", "22", "33", "44", "55");
+    List<String> list2 = Arrays.asList("66", "77", "88", "99", "10");
+    Map<String, List<String>> map = new HashMap<>();
+    map.put("line1", list1);
+    map.put("line2", list2);
+    System.out.println(getMapValuesTotalSize(map));
+
   }
 
 

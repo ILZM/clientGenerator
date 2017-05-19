@@ -1,7 +1,7 @@
 package com.itechtopus.sshgenerator.servlet;
 
 import com.itechtopus.sshgenerator.generator.AllInfoGenerator;
-import com.itechtopus.sshgenerator.storage.MainStorage;
+import com.itechtopus.sshgenerator.generator.Util;
 import com.itechtopus.sshgenerator.storage.Parameters;
 
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ public class ParametersServlet extends HttpServlet {
     request.setAttribute("SCHEDULER_PERIOD", Parameters.SCHEDULER_PERIOD);
     request.setAttribute("DUPLICATES_GENERATION_PERIOD", Parameters.DUPLICATES_GENERATION_PERIOD);
     request.setAttribute("generatedClients", AllInfoGenerator.get().clientPIS.size());
-    request.setAttribute("generatedAccounts", AllInfoGenerator.get().getAccountsSize());
+    request.setAttribute("generatedAccounts", Util.getMapValuesTotalSize(AllInfoGenerator.get().accountMap));
     request.getRequestDispatcher("/WEB-INF/parameters.jsp").forward(request, response);
   }
 
