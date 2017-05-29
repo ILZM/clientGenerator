@@ -2,6 +2,7 @@ package com.itechtopus.sshgenerator.generator;
 
 import com.itechtopus.sshgenerator.model.Client;
 import com.itechtopus.sshgenerator.model.enums.Gender;
+import com.itechtopus.sshgenerator.storage.MainStorage;
 
 import java.util.Date;
 import java.util.List;
@@ -54,6 +55,9 @@ public class ClientGenerator {
   private Client generateRandomClient(Gender gender) {
     Client client = new Client();
     ClientFullName cfn = generateFullName(null);
+    client.cia_id = Util.convertToABC(System.currentTimeMillis());
+    if (rnd.nextBoolean() && rnd.nextBoolean() && rnd.nextBoolean())
+      MainStorage.duplicateIds.push(client.cia_id);
     client.name = cfn.name;
     client.surname = cfn.surname;
     client.patronymic = cfn.patronymic;

@@ -32,6 +32,7 @@ public class Util {
     return (T)getRandom(collection.toArray());
   }
 
+  @SafeVarargs
   public static <T> T getRandom(T... collection) {
     if (collection == null || collection.length == 0)
       return null;
@@ -57,7 +58,7 @@ public class Util {
 
   public static String convertToXML(ClientPI clientPI) {
     StringBuilder sb = new StringBuilder();
-    sb.append("\t<client id=\"" + clientPI.client.id + "\"> \n");
+    sb.append("\t<client id=\"" + separate(clientPI.client.cia_id, '-', 3, 1, 5) + "\"> \n");
     sb.append("\t\t<surname value=\"" + clientPI.client.surname + "\" /> \n");
     sb.append("\t\t<name value=\"" + clientPI.client.name + "\" /> \n");
     sb.append("\t\t<patronymic value=\"" + clientPI.client.patronymic + "\" /> \n");
@@ -152,14 +153,42 @@ public class Util {
     return DATE_FORMAT_XML.format(date);
   }
 
-  public static void main(String[] args) throws InterruptedException {
-    /*List<String> list1 = Arrays.asList("11", "22", "33", "44", "55");
-    List<String> list2 = Arrays.asList("66", "77", "88", "99", "10");
-    Map<String, List<String>> map = new HashMap<>();
-    map.put("line1", list1);
-    map.put("line2", list2);
-    System.out.println(getMapValuesTotalSize(map));*/
+  private static String digits = "0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ";
 
+  public static String convertToABC(long value) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 100000; i >= 0 ; i--) {
+      long power = (long) Math.pow(35, i);
+      if (value > power) {
+        int divider = (int) (value / power);
+        if (divider > 34)
+          throw  new RuntimeException("Incorrect power value");
+        char ch = digits.charAt(divider);
+        sb.append(ch);
+        value %= power * divider;
+      }
+    }
+    return sb.toString();
+  }
+
+  public static String separate(String value, char ch, int... positions) {
+    StringBuilder sb = new StringBuilder();
+    value = new StringBuilder(value).reverse().toString();
+    int lastPosition = 0;
+    for (int position : positions) {
+      int rightPosition = lastPosition + position;
+      if (rightPosition < value.length() && rightPosition > lastPosition) {
+        sb.append(value.substring(lastPosition, rightPosition)).append(ch);
+        lastPosition = rightPosition;
+      }
+    }
+    return sb.append(value.substring(lastPosition)).reverse().toString();
+  }
+
+
+
+  public static void main(String[] args) throws InterruptedException {
+    System.out.println(separate("ABCDEFGHIJKLM", '-', 3, 1, 5));
   }
 
 

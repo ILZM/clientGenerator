@@ -111,9 +111,21 @@ public class TransactionGenerator {
 
   private float getRandomMoneyAmount(TransactionType type, float maximum) {
     float money = Math.abs(rnd.nextFloat() * (maximum <= MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION ? maximum : MAXIMUM_MONEY_AMOUNT_PER_TRANSACTION));
+    int mult = getMultiplierFor(type);
+    money += mult;
+    money *= mult;
     if (isWithdrawing(type))
       money *= -1;
     return money;
+  }
+
+  private int getMultiplierFor(TransactionType type) {
+    switch (type.code) {
+      case "LKUYNHLKJH.W" : return 100000;
+      case "SKUNFWWO23.D" : return 500;
+      case "AAAFDDVKJG.D" : return 100;
+    }
+    return 1;
   }
 
   private boolean isWithdrawing(TransactionType  type) {

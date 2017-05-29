@@ -8,6 +8,7 @@ import com.itechtopus.sshgenerator.to.ClientPI;
 import com.itechtopus.sshgenerator.worker.Saver;
 
 import java.util.List;
+import java.util.Stack;
 
 public class MainStorage {
 
@@ -20,6 +21,8 @@ public class MainStorage {
   public static StringBuffer operations = new StringBuffer();
 
   private static int duplicateCounter = 0;
+
+  public static Stack<String> duplicateIds = new Stack<>();
 
   private static boolean needDuplicate(){
     if (!Parameters.GENERATE_DUPLICATES)
@@ -36,9 +39,14 @@ public class MainStorage {
     public void save(ModelParent entity) {
       if (!(entity instanceof ClientPI))
         throw new IllegalArgumentException("Client saver can only save clientPIs");
-      clientPIs.add((ClientPI) entity);
-      if (needDuplicate())
-        insertIntoList(clientPIs, (ClientPI) entity);
+      ClientPI pi = (ClientPI) entity;
+      if (needDuplicate()) {
+        if (duplicateIds.size() > 0)
+          pi.client.cia_id = duplicateIds.pop();
+        else
+          insertIntoList(clientPIs, pi);
+      }
+      clientPIs.add(pi);
     }
   };
 
@@ -49,7 +57,7 @@ public class MainStorage {
         throw new IllegalArgumentException("Account saver can only save ClientAccounts");
       ClientAccount account = (ClientAccount) entity;
       accounts.add(account);
-      operations.append(Util.convertToXML(account));
+      operations.append(Util.simplify(Util.convertToXML(account))).append('\n');
       if (needDuplicate())
         insertIntoList(accounts, (ClientAccount) entity);
     }
@@ -62,7 +70,7 @@ public class MainStorage {
         throw new IllegalArgumentException("Transaction saver can only save ClientAccountTransactions");
       ClientAccountTransaction transaction = (ClientAccountTransaction) entity;
       transactions.add(transaction);
-      operations.append(Util.convertToXML(transaction));
+      operations.append(Util.simplify(Util.convertToXML(transaction))).append('\n');
       if (needDuplicate())
         insertIntoList(transactions, (ClientAccountTransaction) entity);
     }

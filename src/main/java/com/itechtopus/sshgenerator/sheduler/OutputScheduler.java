@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import static com.itechtopus.sshgenerator.generator.Constants.DATE_FORMAT2;
 
@@ -51,7 +52,7 @@ public class OutputScheduler implements Runnable {
     String newFileName = getOperationsNewFileName();
     File file = new File(getOperationsNewFileName());
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-      bw.write(Util.simplify(MainStorage.operations.toString()));
+      bw.write(MainStorage.operations.toString());
       bw.flush();
       log.info(MainStorage.operations.toString());
       MainStorage.operations = new StringBuffer();
@@ -67,7 +68,11 @@ public class OutputScheduler implements Runnable {
     File file = new File(newFileName);
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-      bw.write(Util.simplify(Util.convertToXML(MainStorage.clientPIs)));
+      bw.write(MainStorage.clientPIs
+          .stream()
+          .map(Util::convertToXML)
+          .map(Util::simplify)
+          .collect(Collectors.joining("\n")));
       bw.flush();
       log.info("" + Util.convertToXML(MainStorage.clientPIs));
       MainStorage.clientPIs.clear();

@@ -7,6 +7,7 @@ import java.util.Date;
 public class Client extends ModelParent{
 
   public Integer id;
+  public String cia_id;
   public String surname;
   public String name;
   public String patronymic;

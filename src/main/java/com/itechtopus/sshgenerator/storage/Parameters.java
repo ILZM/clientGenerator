@@ -22,5 +22,7 @@ public class Parameters {
 
   public static String OUTPUT_FOLDER = "/transfer/";
 
+  public static int NEW_CHARM_PERIOD = 3;
+
 
 }

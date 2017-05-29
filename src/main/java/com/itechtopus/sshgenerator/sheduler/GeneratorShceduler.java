@@ -1,6 +1,7 @@
 package com.itechtopus.sshgenerator.sheduler;
 
 import com.itechtopus.sshgenerator.generator.AllInfoGenerator;
+import com.itechtopus.sshgenerator.generator.CharmGenerator;
 import com.itechtopus.sshgenerator.generator.Constants;
 import com.itechtopus.sshgenerator.storage.MainStorage;
 import com.itechtopus.sshgenerator.storage.Parameters;
@@ -44,6 +45,8 @@ public class GeneratorShceduler implements Runnable{
       generateAccounts();
     if (counter % Parameters.CLIENT_GENERATION_PERIOD == 0)
       generateClient();
+    if (counter % Parameters.NEW_CHARM_PERIOD == 0)
+      generateNewCharm();
 
     if (transactionCount++ > Constants.TRANSACTION_BUFFER_SIZE) {
       transactionCount = 0;
@@ -54,6 +57,10 @@ public class GeneratorShceduler implements Runnable{
               .filter(line -> !line.contains("new_account"))
               .count());
     }
+  }
+
+  private void generateNewCharm() {
+    CharmGenerator.getInstance().addNewRandomCharm();
   }
 
   private void doCount() {

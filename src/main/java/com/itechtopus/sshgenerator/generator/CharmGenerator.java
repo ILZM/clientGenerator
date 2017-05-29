@@ -9,6 +9,8 @@ public class CharmGenerator {
 
   private static CharmGenerator instance;
 
+  int id = 0;
+
   private final Map<Integer, Charm> charmMap = Util.newMap();
 
   public static CharmGenerator getInstance() {
@@ -23,7 +25,6 @@ public class CharmGenerator {
   }
 
   private void processData() {
-    int id = 0;
     for (Map.Entry<String, String> pair : StaticBase.charmMap.entrySet()){
       charmMap.put(id++, new Charm(Constants.ASSIGN_ID_TO_GENERATED_DATA ? 1000 + id: null, pair.getKey(), pair.getValue(), generateRandomEnergy()));
     }
@@ -37,6 +38,13 @@ public class CharmGenerator {
     return Math.abs(Util.rnd.nextFloat());
   }
 
+  public void addNewRandomCharm() {
+    charmMap.put(id++,
+        new Charm(Constants.ASSIGN_ID_TO_GENERATED_DATA ? 1000 + id: null,
+            Util.getRandom(StaticBase.extraCharacters),
+            "No_description",
+            generateRandomEnergy()));
+  }
 
   public Charm getRandomCharm() {
     return Util.getRandom(charmMap.values());
