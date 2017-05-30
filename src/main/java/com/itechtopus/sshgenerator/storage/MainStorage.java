@@ -50,7 +50,7 @@ public class MainStorage {
     }
   };
 
-  public  static Saver AccountSaver = new Saver() {
+  public  static Saver accountSaver = new Saver() {
     @Override
     public void save(ModelParent entity) {
       if (!(entity instanceof ClientAccount))

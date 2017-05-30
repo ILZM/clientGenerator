@@ -29,7 +29,7 @@ public class AllInfoGenerator {
 
   public static AllInfoGenerator get() {
     if (instance == null)
-      instance = new AllInfoGenerator(MainStorage.clientPISaver, MainStorage.AccountSaver, MainStorage.transactionSaver);
+      instance = new AllInfoGenerator(MainStorage.clientPISaver, MainStorage.accountSaver, MainStorage.transactionSaver);
     return instance;
   }
 

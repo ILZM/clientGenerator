@@ -68,11 +68,13 @@ public class OutputScheduler implements Runnable {
     File file = new File(newFileName);
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+      bw.write("<cia>");
       bw.write(MainStorage.clientPIs
           .stream()
           .map(Util::convertToXML)
           .map(Util::simplify)
           .collect(Collectors.joining("\n")));
+      bw.write("</cia>");
       bw.flush();
       log.info("" + Util.convertToXML(MainStorage.clientPIs));
       MainStorage.clientPIs.clear();
