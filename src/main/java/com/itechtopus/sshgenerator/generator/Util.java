@@ -120,7 +120,7 @@ public class Util {
   public static String convertToXML(ClientAccount newAccount) {
     StringBuilder sb = new StringBuilder("{\n");
     sb.append(convertPair("type", "new_account"));
-    sb.append(convertPair("client_id", format(newAccount.client.id)));
+    sb.append(convertPair("client_id", format(newAccount.client.cia_id)));
     sb.append(convertPair("account_number", format(newAccount.a_number)));
     sb.append(convertPair("registered_at", formatXML(newAccount.registeredAt)));
     sb.append("}\n");
