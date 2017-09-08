@@ -104,10 +104,10 @@ public class Util {
 
   public static String convertToXML(ClientAccountTransaction transaction) {
     StringBuilder sb = new StringBuilder("{\n");
-    sb.append(convertPair("type", "transaction"));
-    sb.append(convertPair("money", format(transaction.money)));
-    sb.append(convertPair("finished_at", formatXML(transaction.finishedAt)));
-    sb.append(convertPair("transaction_type", transaction.type.name));
+    sb.append(convertPair("type", "transaction")).append(",");
+    sb.append(convertPair("money", format(transaction.money))).append(",");
+    sb.append(convertPair("finished_at", formatXML(transaction.finishedAt))).append(",");
+    sb.append(convertPair("transaction_type", transaction.type.name)).append(",");
     sb.append(convertPair("account_number", transaction.account.a_number));
     sb.append("}\n");
     return sb.toString();
@@ -119,9 +119,9 @@ public class Util {
 
   public static String convertToXML(ClientAccount newAccount) {
     StringBuilder sb = new StringBuilder("{\n");
-    sb.append(convertPair("type", "new_account"));
-    sb.append(convertPair("client_id", format(newAccount.client.cia_id)));
-    sb.append(convertPair("account_number", format(newAccount.a_number)));
+    sb.append(convertPair("type", "new_account")).append(",");
+    sb.append(convertPair("client_id", format(newAccount.client.cia_id))).append(",");
+    sb.append(convertPair("account_number", format(newAccount.a_number))).append(",");
     sb.append(convertPair("registered_at", formatXML(newAccount.registeredAt)));
     sb.append("}\n");
     return sb.toString();
