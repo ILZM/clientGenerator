@@ -58,7 +58,7 @@ public class Util {
 
   public static String convertToXML(ClientPI clientPI) {
     StringBuilder sb = new StringBuilder();
-    sb.append("\t<client id=\"" + separate(clientPI.client.cia_id, '-', 3, 1, 5) + "\"> \n");
+    sb.append("\t<client id=\"" + clientPI.client.cia_id + "\"> \n");
     sb.append("\t\t<surname value=\"" + clientPI.client.surname + "\" /> \n");
     sb.append("\t\t<name value=\"" + clientPI.client.name + "\" /> \n");
     sb.append("\t\t<patronymic value=\"" + clientPI.client.patronymic + "\" /> \n");
