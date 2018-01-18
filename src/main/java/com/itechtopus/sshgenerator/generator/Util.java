@@ -128,10 +128,7 @@ public class Util {
   }
 
   private static String format(String account_number) {
-    return account_number.substring(0, 10) + "-" +
-        account_number.substring(10, 15) + "-" +
-        account_number.substring(15, 21) + "-" +
-        account_number.substring(21);
+    return account_number;
   }
 
   private static String format(Date birthDate) {
@@ -158,7 +155,7 @@ public class Util {
   public static String convertToABC(long value) {
     StringBuilder sb = new StringBuilder();
     for (int i = 100000; i >= 0 ; i--) {
-      long power = (long) Math.pow(35, i);
+      long power = (long) Math.pow(34, i);
       if (value > power) {
         int divider = (int) (value / power);
         if (divider > 34)

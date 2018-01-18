@@ -8,7 +8,7 @@ public class Parameters {
 
   public static int ACCOUNT_AND_TRANSACTION_BUFFER_SIZE = 50_000;
 
-  public static long SCHEDULER_PERIOD = 1_000; // in milliseconds
+  public static long SCHEDULER_PERIOD = 1000; // in milliseconds
 
   public static int TRANSACTIONS_PER_ITERATION = 200; // number of transactions need to be generated every iteration
 
@@ -20,7 +20,7 @@ public class Parameters {
 
   public static int DUPLICATES_GENERATION_PERIOD = 5; // one of 5000 is stored as duplicate
 
-  public static String OUTPUT_FOLDER = "/transfer/";
+  public static String OUTPUT_FOLDER = "/home/jgolibzhan/123/";
 
   public static int NEW_CHARM_PERIOD = 10;
 

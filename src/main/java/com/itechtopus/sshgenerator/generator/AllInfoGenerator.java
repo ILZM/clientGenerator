@@ -1,6 +1,8 @@
 package com.itechtopus.sshgenerator.generator;
 
-import com.itechtopus.sshgenerator.model.*;
+import com.itechtopus.sshgenerator.model.Client;
+import com.itechtopus.sshgenerator.model.ClientAccount;
+import com.itechtopus.sshgenerator.model.ClientAccountTransaction;
 import com.itechtopus.sshgenerator.model.enums.AddressType;
 import com.itechtopus.sshgenerator.model.enums.PhoneType;
 import com.itechtopus.sshgenerator.storage.MainStorage;
@@ -9,10 +11,17 @@ import com.itechtopus.sshgenerator.to.ClientPI;
 import com.itechtopus.sshgenerator.to.ClientTo;
 import com.itechtopus.sshgenerator.worker.Saver;
 
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.itechtopus.sshgenerator.generator.Constants.*;
+import static com.itechtopus.sshgenerator.generator.Util.convertToXML;
 import static com.itechtopus.sshgenerator.generator.Util.rnd;
 
 public class AllInfoGenerator {
@@ -59,10 +68,10 @@ public class AllInfoGenerator {
     return sum;
   }
 
-  /*public List<ClientTo> getAllTos() {
+/*  public List<ClientTo> getAllTos() {
     return Util.getListOfCollection(clientToMap.values());
-  }
-*/
+  }*/
+
  /* private void generateData(int amount) {
     for (Client client : clientGenerator.getAllClients()) {
       clientToMap.put(client.id, generateNewClientTo(client));
@@ -180,38 +189,36 @@ public class AllInfoGenerator {
     }
   }
 
-/*
+
   private static String format2(Date date) {
     return DATE_FORMAT2.format(date);
-  }*/
+  }
 
-/*
+
   public static void main(String[] args){
     AllInfoGenerator aig = AllInfoGenerator.get();
-    System.out.println(aig.convertToXML(aig.getAllTos()));
+
+
+    System.out.println(convertToXML(aig.clientPIS));
     System.out.println("\n\n\n");
-    System.out.println(aig.getUnreadableXML(aig.getAllTos().subList(0, 10)));
-    String fileName = "/home/yerlan/xmls/" + format2(new Date()) + "-cia.xml";
-    String fileName2 = "/home/yerlan/xmls/" + format2(new Date()) + "-cia-right.xml";
+
+    String fileName = "/home/jgolibzhan/xmls/asdf-cia.xml";
 
     File file = new File(fileName);
-    File file2 = new File(fileName2);
 
     try (
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        BufferedWriter bw2 = new BufferedWriter(new FileWriter(file2))
+      BufferedWriter bw = new BufferedWriter(new FileWriter(file));
     ) {
-      bw.write(aig.convertToXML(aig.getAllTos()));
-      bw2.write(aig.getUnreadableXML(aig.getAllTos()));
+
+      for (int i = 0; i < 200; i++) aig.generateNewClientPI();
+
+      bw.write(convertToXML(aig.clientPIS));
       bw.flush();
-      bw2.flush();
     } catch (Exception e) {
       System.out.println("Unsuccessful. Message:" + e.getLocalizedMessage());
     }
     System.out.println("Records successfully added to the file ");
   }
-*/
-
 
 
 }
