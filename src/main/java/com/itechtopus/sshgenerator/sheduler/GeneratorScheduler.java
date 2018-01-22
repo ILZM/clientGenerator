@@ -61,7 +61,7 @@ public class GeneratorScheduler implements Runnable{
 
   public void generateNClients(int n) {
     for (int i = 0; i < n; i++) {
-      generator.generateNewClientPI();
+      generator.generateNewClientPI(true);
     }
   }
 
@@ -88,7 +88,7 @@ public class GeneratorScheduler implements Runnable{
   }
 
   private void generateClient() {
-    log.info("Generating new client: " + generator.generateNewClientPI());
+    log.info("Generating new client: " + generator.generateNewClientPI(false));
   }
 
   private void generateAccounts() {
