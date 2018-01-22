@@ -9,6 +9,17 @@ import com.itechtopus.sshgenerator.generator.AllInfoGenerator;
 import com.itechtopus.sshgenerator.sheduler.GeneratorScheduler;
 import com.itechtopus.sshgenerator.sheduler.OutputScheduler;
 
+/**
+ *
+ *     !!! Important !!!
+ *
+ * для того, чтобы запустить генератор через этот main,
+ * нужно указать в параметрах Vm options значение
+ *   -Xmx10000m (не менбше)
+ * так как вся коллекция хранится в оперативной памяти
+ * для быстроты генерации
+ */
+
 public class Main {
 
   private static boolean isInterrupted = false;
@@ -34,18 +45,28 @@ public class Main {
       }
     });
 
-    counter.start();
-
-    GeneratorScheduler generatorScheduler = new GeneratorScheduler();
-    generatorScheduler.generateNClients(1_000_000);
-    generatorScheduler.generateNAccount(1_000_000);
-    generatorScheduler.generateNTransactions(10_000_000);
-
     OutputScheduler outputScheduler = new OutputScheduler();
+    try {
+      counter.start();
+      GeneratorScheduler generatorScheduler = new GeneratorScheduler();
+      generatorScheduler.generateNClients(1_000_000);
 
-    outputScheduler.flush();
+      outputScheduler.flushClients();
+      generatorScheduler.generateNAccount(1_000_000);
 
-    isInterrupted = true;
+      for (int i = 0; i < 10; i++) {
+        generatorScheduler.generateNTransactions(1_000_000);
+        outputScheduler.flush();
+      }
+
+    } finally {
+
+
+      outputScheduler.flush();
+
+
+      isInterrupted = true;
+    }
 
     counter.join();
 
