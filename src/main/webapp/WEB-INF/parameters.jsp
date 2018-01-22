@@ -75,7 +75,7 @@
         };
 
         function redirect() {
-            document.getElementById("refffresh").submit();
+          document.getElementById("refresh").submit();
         }
     </script>
 </body>

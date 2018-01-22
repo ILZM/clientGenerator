@@ -8,9 +8,9 @@ public class Parameters {
 
   public static int ACCOUNT_AND_TRANSACTION_BUFFER_SIZE = 50_000;
 
-  public static long SCHEDULER_PERIOD = 1000; // in milliseconds
+  public static long SCHEDULER_PERIOD = 500; // in milliseconds
 
-  public static int TRANSACTIONS_PER_ITERATION = 200; // number of transactions need to be generated every iteration
+  public static int TRANSACTIONS_PER_ITERATION = 100; // number of transactions need to be generated every iteration
 
   public static int ACCOUNT_GENERATION_PERIOD = 3; // 5 means one account per 5 seconds (if sheduler period is 1000 ms)
 
