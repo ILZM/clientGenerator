@@ -27,17 +27,12 @@ public class ClientPI extends ModelParent {
 
     ClientPI clientPI = (ClientPI) o;
 
-    if (client != null ? !client.equals(clientPI.client) : clientPI.client != null) return false;
-    if (addresses != null ? !addresses.equals(clientPI.addresses) : clientPI.addresses != null) return false;
-    return phones != null ? phones.equals(clientPI.phones) : clientPI.phones == null;
+    return client != null ? client.equals(clientPI.client) : clientPI.client == null;
   }
 
   @Override
   public int hashCode() {
-    int result = client != null ? client.hashCode() : 0;
-    result = 31 * result + (addresses != null ? addresses.hashCode() : 0);
-    result = 31 * result + (phones != null ? phones.hashCode() : 0);
-    return result;
+    return client != null ? client.hashCode() : 0;
   }
 
   @Override

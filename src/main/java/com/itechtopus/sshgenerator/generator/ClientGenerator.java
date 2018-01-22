@@ -7,6 +7,7 @@ import com.itechtopus.sshgenerator.storage.MainStorage;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.itechtopus.sshgenerator.generator.Constants.*;
@@ -55,7 +56,7 @@ public class ClientGenerator {
   private Client generateRandomClient(Gender gender) {
     Client client = new Client();
     ClientFullName cfn = generateFullName(null);
-    client.cia_id = Util.convertToABC(System.currentTimeMillis());
+    client.cia_id = UUID.randomUUID().toString();
     if (rnd.nextBoolean() && rnd.nextBoolean() && rnd.nextBoolean())
       MainStorage.duplicateIds.push(client.cia_id);
     client.name = cfn.name;
