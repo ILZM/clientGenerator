@@ -58,7 +58,7 @@ public class Util {
 
   public static String convertToXML(ClientPI clientPI) {
     StringBuilder sb = new StringBuilder();
-    sb.append("\t<client id=\"" + separate(clientPI.client.cia_id, '-', 3, 1, 5) + "\"> \n");
+    sb.append("\t<client id=\"" + clientPI.client.cia_id + "\"> \n");
     sb.append("\t\t<surname value=\"" + clientPI.client.surname + "\" /> \n");
     sb.append("\t\t<name value=\"" + clientPI.client.name + "\" /> \n");
     sb.append("\t\t<patronymic value=\"" + clientPI.client.patronymic + "\" /> \n");
@@ -104,10 +104,10 @@ public class Util {
 
   public static String convertToXML(ClientAccountTransaction transaction) {
     StringBuilder sb = new StringBuilder("{\n");
-    sb.append(convertPair("type", "transaction"));
-    sb.append(convertPair("money", format(transaction.money)));
-    sb.append(convertPair("finished_at", formatXML(transaction.finishedAt)));
-    sb.append(convertPair("transaction_type", transaction.type.name));
+    sb.append(convertPair("type", "transaction")).append(",");
+    sb.append(convertPair("money", format(transaction.money))).append(",");
+    sb.append(convertPair("finished_at", formatXML(transaction.finishedAt))).append(",");
+    sb.append(convertPair("transaction_type", transaction.type.name)).append(",");
     sb.append(convertPair("account_number", transaction.account.a_number));
     sb.append("}\n");
     return sb.toString();
@@ -119,19 +119,16 @@ public class Util {
 
   public static String convertToXML(ClientAccount newAccount) {
     StringBuilder sb = new StringBuilder("{\n");
-    sb.append(convertPair("type", "new_account"));
-    sb.append(convertPair("client_id", format(newAccount.client.cia_id)));
-    sb.append(convertPair("account_number", format(newAccount.a_number)));
+    sb.append(convertPair("type", "new_account")).append(",");
+    sb.append(convertPair("client_id", format(newAccount.client.cia_id))).append(",");
+    sb.append(convertPair("account_number", format(newAccount.a_number))).append(",");
     sb.append(convertPair("registered_at", formatXML(newAccount.registeredAt)));
     sb.append("}\n");
     return sb.toString();
   }
 
   private static String format(String account_number) {
-    return account_number.substring(0, 10) + "-" +
-        account_number.substring(10, 15) + "-" +
-        account_number.substring(15, 21) + "-" +
-        account_number.substring(21);
+    return account_number;
   }
 
   private static String format(Date birthDate) {
@@ -158,7 +155,7 @@ public class Util {
   public static String convertToABC(long value) {
     StringBuilder sb = new StringBuilder();
     for (int i = 100000; i >= 0 ; i--) {
-      long power = (long) Math.pow(35, i);
+      long power = (long) Math.pow(34, i);
       if (value > power) {
         int divider = (int) (value / power);
         if (divider > 34)

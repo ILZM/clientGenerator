@@ -35,4 +35,5 @@ public class Constants {
   public static final Client CLIENT = new Client(1, "Иванов", "Иван", "Иванович", Gender.MALE, new Date(JAN_1_1970), CHARM);
   public static final ClientAccount ACOUNT = new ClientAccount(1, CLIENT, "KZT1254785398547841254800", 1_000_000f, new Date(JAN_1_2010));
   public static final long TRANSACTION_BUFFER_SIZE = 100_000;
+
 }
