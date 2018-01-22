@@ -21,6 +21,10 @@ public class OutputScheduler implements Runnable {
 
   private long counter = 0;
 
+  public void flushClients() {
+    flushClientPIS(false);
+  }
+
   @Override
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
@@ -39,17 +43,17 @@ public class OutputScheduler implements Runnable {
     File outputDir = new File(Parameters.OUTPUT_FOLDER);
     if (outputDir.exists())
       outputDir.mkdirs();
-    flushClientPIS();
-    flushOperations();
+    flushClientPIS(false);
+    flushOperations(false);
   }
 
   private void doIteration() {
     doCount();
-    flushClientPIS();
-    flushOperations();
+    flushClientPIS(true);
+    flushOperations(true);
   }
 
-  private void flushOperations() {
+  private void flushOperations(boolean needToLog) {
     if (MainStorage.operations.length() == 0)
       return;
     String newFileName = getOperationsNewFileName();
@@ -57,14 +61,14 @@ public class OutputScheduler implements Runnable {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
       bw.write(MainStorage.operations.toString());
       bw.flush();
-      log.info(MainStorage.operations.toString());
+      if (needToLog) log.info(MainStorage.operations.toString());
       MainStorage.operations = new StringBuffer();
     } catch (IOException e) {
       log.info("Error during output writing Operations to file:" + newFileName, e);
     }
   }
 
-  private void flushClientPIS() {
+  private void flushClientPIS(boolean needToLog) {
     if (MainStorage.clientPIs.isEmpty())
       return;
     String newFileName = getCIANewFileName();
@@ -79,7 +83,7 @@ public class OutputScheduler implements Runnable {
           .collect(Collectors.joining("\n")));
       bw.write("\n</cia>");
       bw.flush();
-      log.info("" + Util.convertToXML(MainStorage.clientPIs));
+      if (needToLog) log.info("" + Util.convertToXML(MainStorage.clientPIs));
       MainStorage.clientPIs.clear();
     } catch (IOException e) {
       log.info("Error during output writing ClientPI's to file:" + newFileName, e);
