@@ -35,7 +35,10 @@ public class OutputScheduler implements Runnable {
     }
   }
 
-  private void flush() {
+  public void flush() {
+    File outputDir = new File(Parameters.OUTPUT_FOLDER);
+    if (outputDir.exists())
+      outputDir.mkdirs();
     flushClientPIS();
     flushOperations();
   }

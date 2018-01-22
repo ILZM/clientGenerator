@@ -202,9 +202,12 @@ public class AllInfoGenerator {
     System.out.println(convertToXML(aig.clientPIS));
     System.out.println("\n\n\n");
 
-    String fileName = "/home/jgolibzhan/xmls/asdf-cia.xml";
+    String fileName = System.getProperty("user.home") + "asdf-cia.xml";
 
     File file = new File(fileName);
+
+    if (!file.getParentFile().exists())
+      file.getParentFile().mkdirs();
 
     try (
       BufferedWriter bw = new BufferedWriter(new FileWriter(file));

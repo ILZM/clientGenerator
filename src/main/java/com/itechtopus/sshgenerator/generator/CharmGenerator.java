@@ -5,7 +5,7 @@ import com.itechtopus.sshgenerator.model.Charm;
 import java.util.List;
 import java.util.Map;
 
-public class CharmGenerator {
+public class  CharmGenerator {
 
   private static CharmGenerator instance;
 

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
-public class GeneratorShceduler implements Runnable{
+public class GeneratorScheduler implements Runnable{
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -20,7 +20,7 @@ public class GeneratorShceduler implements Runnable{
 
   private AllInfoGenerator generator;
 
-  public GeneratorShceduler() {
+  public GeneratorScheduler() {
     generator = AllInfoGenerator.get();
   }
 
@@ -38,7 +38,7 @@ public class GeneratorShceduler implements Runnable{
     }
   }
 
-  private void doIteration() {
+  public void doIteration() {
     doCount();
     generateTransactions();
     if (counter %  Parameters.ACCOUNT_GENERATION_PERIOD == 0)
@@ -58,6 +58,25 @@ public class GeneratorShceduler implements Runnable{
               .count());
     }
   }
+
+  public void generateNClients(int n) {
+    for (int i = 0; i < n; i++) {
+      generator.generateNewClientPI();
+    }
+  }
+
+  public void generateNAccount(int n) {
+    for (int i = 0; i < n; i++) {
+      generator.generateNewAccount();
+    }
+  }
+
+  public void generateNTransactions(int n) {
+    for (int i = 0; i < n; i++) {
+      generator.generateNewTransaction();
+    }
+  }
+
 
   private void generateNewCharm() {
     CharmGenerator.getInstance().addNewRandomCharm();
