@@ -26,6 +26,12 @@ public class Util {
     return new ArrayList<T>(values);
   }
 
+  public static <T> T getRandom(List<T> collection) {
+    if (collection == null || collection.isEmpty())
+      return null;
+    return collection.get(rnd.nextInt(collection.size()));
+  }
+
   public static <T> T getRandom(Collection<T> collection) {
     if (collection == null || collection.isEmpty())
       return null;
@@ -40,11 +46,11 @@ public class Util {
   }
 
   public static <K, V> Map<K,V> newMap() {
-    return new ConcurrentHashMap<K, V>();
+    return new ConcurrentHashMap<>();
   }
 
   public static <T> List<T> newList() {
-    return new CopyOnWriteArrayList<T>();
+    return new ArrayList<>();
   }
 
   public static <T> Set<T> newSet() {

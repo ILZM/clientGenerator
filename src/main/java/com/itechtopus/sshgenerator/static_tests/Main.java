@@ -18,11 +18,16 @@ public class Main {
     Long startTime = System.currentTimeMillis();
 
     Thread counter = new Thread(() -> {
+      int finished = 0;
       while (!isInterrupted) {
         Long elapsed = System.currentTimeMillis() - startTime;
+        int currentlyGenerated = AllInfoGenerator.get().clientPIS.size();
         System.err.print("\r" + getStrRepresentationOfTime(elapsed) +
-          " Количество клиентов: " + AllInfoGenerator.get().clientPIS.size() + "" +
-          " Количество счетов: " + AllInfoGenerator.get().accountMap.size());
+          " Количество клиентов: " + currentlyGenerated +
+          " Количество счетов: " + AllInfoGenerator.get().accountMap.size() +
+          " Скорость: " + ((currentlyGenerated - finished) / 0.5) + " кл/сек."
+        );
+        finished = currentlyGenerated;
         try {
           Thread.sleep(500);
         } catch (InterruptedException ignore) {}
