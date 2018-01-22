@@ -46,7 +46,7 @@ public class AllInfoGenerator {
   private final Saver saveAccount;
   private final Saver saveTransaction;
 
-  public final Set<ClientPI> clientPIS = Util.newSet();
+  public final List<ClientPI> clientPIS = Util.newList();
   public final Map<ClientPI, List<ClientAccount>> accountMap = Util.newMap();
 
   private final AtomicInteger clientIdCounter = new AtomicInteger(10000);
@@ -83,11 +83,11 @@ public class AllInfoGenerator {
    * Also stores in clientPIS List
    * @return new clientPI instance
    */
-  public ClientPI generateNewClientPI() {
+  public ClientPI generateNewClientPI(boolean force) {
     ClientPI clientPI = new ClientPI();
     do {
       clientPI.client = clientGenerator.generateNewClient();
-    } while (clientPIS.contains(clientPI));
+    } while (clientPIS.contains(clientPI) && !force);
 
     clientPI.client.id = clientIdCounter.incrementAndGet();
 
@@ -112,7 +112,7 @@ public class AllInfoGenerator {
 
   public ClientPI getRandomClientPI() {
     ClientPI clientPI = Util.getRandom(clientPIS);
-    return  clientPI != null ? clientPI : generateNewClientPI();
+    return  clientPI != null ? clientPI : generateNewClientPI(false);
   }
 
   public ClientAccount generateNewAccount(ClientPI clientPi){
@@ -213,7 +213,7 @@ public class AllInfoGenerator {
       BufferedWriter bw = new BufferedWriter(new FileWriter(file));
     ) {
 
-      for (int i = 0; i < 200; i++) aig.generateNewClientPI();
+      for (int i = 0; i < 200; i++) aig.generateNewClientPI(false);
 
       bw.write(convertToXML(aig.clientPIS));
       bw.flush();
