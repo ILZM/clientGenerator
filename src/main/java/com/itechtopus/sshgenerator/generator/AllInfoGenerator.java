@@ -87,7 +87,7 @@ public class AllInfoGenerator {
     ClientPI clientPI = new ClientPI();
     do {
       clientPI.client = clientGenerator.generateNewClient();
-    } while (clientPIS.contains(clientPI) && !force);
+    } while (!force && clientPIS.contains(clientPI));
 
     clientPI.client.id = clientIdCounter.incrementAndGet();
 
